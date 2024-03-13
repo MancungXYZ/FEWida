@@ -7,6 +7,7 @@ import Navbar from './components/Navbar'
 import Invoice from './pages/Invoice'
 import Cart from './pages/Cart'
 import Transaction from './pages/Transaction'
+import Revenue from "./pages/Revenue";
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/cart" component={Cart} />
           <Route path="/invoice" component={Invoice} />
           <Route path="/" component={Transaction} />
+          <Route path="/revenue" component={Revenue} />
         </Switch>
       </Router>
     </div>

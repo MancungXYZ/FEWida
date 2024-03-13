@@ -10,6 +10,7 @@ function Cart() {
 
   const cart = useSelector((state) => state.cart)
   const dispatch = useDispatch()
+  console.log(cart.cartItems)
 
   useEffect(() => {
     dispatch(getTotals());
@@ -26,12 +27,21 @@ function Cart() {
   };
 
   const pajak = (10/100)*cart.cartTotalAmount;
-  const total = pajak + cart.cartTotalAmount;
+  const total = parseInt(pajak + cart.cartTotalAmount);
+  const [name, setName] = useState('')
+  const [sales, setSales] = useState('')
+  const [note, setNote] = useState('')
+  const [radioValue, setRadioValue] = useState('CREDIT');
+  const onChange = (e) => {
+    //save your value here with state variable
+    console.log(e.target.value);
+    setRadioValue(e.target.value);
+  };
+
+  console.log(radioValue)
 
   const handlePesanan = () => {
-    const [name, setName] = useState('')
-    const [sales, setSales] = useState('')
-    const [note, setNote] = useState('')
+    console.log('clicked')
 
     try {
       const res = axios({
@@ -40,9 +50,11 @@ function Cart() {
         data: {
           customer: name,
           salesPerson: sales,
-          note: note,
-          paymentType: "CASH",
+          notes: note,
+          paymentType: radioValue,
           date: moment().format('LL'),
+          products: cart.cartItems,
+          amount: total
         }
       })
     } catch (error) {
@@ -83,7 +95,7 @@ function Cart() {
           <div class="">
             <label for="name" class="mt-4 mb-2 block text-sm font-medium">Name</label>
             <div class="relative">
-              <input type="text" id="name" name="name" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Your full name here" required/>
+              <input type="text" onChange={e => setName(e.target.value)} id="name" name="name" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Your full name here" required/>
               <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
@@ -92,7 +104,7 @@ function Cart() {
             </div>
             <label for="sales-person" class="mt-4 mb-2 block text-sm font-medium">Sales Person</label>
             <div class="relative">
-              <input type="text" id="sales-person" name="sales-person" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm uppercase shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Your full name here" required />
+              <input type="text" onChange={e => setSales(e.target.value)} id="sales-person" name="sales-person" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm uppercase shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Your full name here" required />
               <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
@@ -101,7 +113,25 @@ function Cart() {
             </div>
             <label for="sales-person" class="mt-4 mb-2 block text-sm font-medium">Note</label>
             <div class="relative">
-              <textarea  id="sales-person" name="sales-person" class="w-full rounded-md border border-gray-200 px-4 py-3 text-sm uppercase shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Optional" />
+              <textarea onChange={e => setNote(e.target.value)}  id="sales-person" name="sales-person" class="w-full rounded-md border border-gray-200 px-4 py-3 text-sm uppercase shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Optional" />
+            </div>
+
+            <div>
+            <p class="font-medium mb-1 text-gray-500">Payment Type</p>
+              <div class="flex gap-x-4">
+                <div class="relative flex w-56 items-center justify-center rounded-xl bg-gray-50 px-4 py-3 font-medium text-gray-700">
+                  <input class="peer hidden" onChange={onChange} type="radio" name="radio" value='CASH' id="radio1" checked />
+                  <label class="peer-checked:border-blue-400 peer-checked:bg-blue-200 absolute top-0 h-full w-full cursor-pointer rounded-xl border" for="radio1"> </label>
+                  <div class="peer-checked:border-transparent peer-checked:bg-blue-400 peer-checked:ring-2 absolute left-4 h-5 w-5 rounded-full border-2 border-gray-300 bg-gray-200 ring-blue-400 ring-offset-2"></div>
+                  <span class="pointer-events-none z-10">CASH</span>
+                </div>
+                <div class="relative flex w-56 items-center justify-center rounded-xl bg-gray-50 px-4 py-3 font-medium text-gray-700">
+                  <input class="peer hidden" onChange={onChange} type="radio" name="radio" value='CREDIT' id="radio3" checked />
+                  <label class="peer-checked:border-blue-400 peer-checked:bg-blue-200 absolute top-0 h-full w-full cursor-pointer rounded-xl border" for="radio3"> </label>
+                  <div class="peer-checked:border-transparent peer-checked:bg-blue-400 peer-checked:ring-2 absolute left-4 h-5 w-5 rounded-full border-2 border-gray-300 bg-gray-200 ring-blue-400 ring-offset-2"></div>
+                  <span class="pointer-events-none z-10">CREDIT</span>
+                </div>
+              </div>
             </div>
 
             <div class="mt-6 border-t border-b py-2">
@@ -119,7 +149,7 @@ function Cart() {
               <p class="text-2xl font-semibold text-gray-900">Rp {total}</p>
             </div>
           </div>
-          <button onClick={() => handlePesanan} class="mt-4 mb-8 w-full rounded-md bg-blackgood px-6 py-3 font-medium text-white">Place Order</button>
+          <button type='button' onClick={() => handlePesanan()} class="mt-4 mb-8 w-full rounded-md bg-blackgood px-6 py-3 font-medium text-white">Place Order</button>
         </div>
       </div>
       </>
