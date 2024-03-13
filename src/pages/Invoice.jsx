@@ -1,17 +1,20 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 
 
 function Invoice() {
 
     const [orders, setOrders] = useState({})
+    const location = useLocation();
+    const id = location.pathname.split("/")[2];
 
     useEffect(() => {
         const getOrders = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/orders')
+                const res = await axios.get(`http://localhost:5000/api/orders/find/${id}`)
                 .then(res => {
-                    setOrders(res.data[0]);
+                    setOrders(res.data);
                 })
             } catch (error) {
                 console.log(error)
@@ -20,13 +23,15 @@ function Invoice() {
         getOrders()
       }, [])
 
-      let sum = orders.products?.reduce(function(prev, current) {
-        return prev + +current.price
-      }, 0);
-      
-      let pajak = 10/100 * sum;
+      console.log(orders)
 
-      let grandPrice = pajak + sum;
+      // let sum = orders?.reduce(function(prev, current) {
+      //   return prev + +current.price
+      // }, 0);
+      
+      // let pajak = 10/100 * sum;
+
+      // let grandPrice = pajak + sum;
       
     return (
     <section className="bg-white py-20">

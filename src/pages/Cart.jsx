@@ -27,14 +27,12 @@ function Cart() {
   };
 
   const pajak = (10/100)*cart.cartTotalAmount;
-  const total = parseInt(pajak + cart.cartTotalAmount);
+  const total = pajak + cart.cartTotalAmount;
   const [name, setName] = useState('')
   const [sales, setSales] = useState('')
   const [note, setNote] = useState('')
   const [radioValue, setRadioValue] = useState('CREDIT');
   const onChange = (e) => {
-    //save your value here with state variable
-    console.log(e.target.value);
     setRadioValue(e.target.value);
   };
 
@@ -53,8 +51,8 @@ function Cart() {
           notes: note,
           paymentType: radioValue,
           date: moment().format('LL'),
-          products: cart.cartItems,
-          amount: total
+          amount: total,
+          products: cart.cartItems
         }
       })
     } catch (error) {

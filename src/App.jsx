@@ -18,7 +18,7 @@ function App() {
         <Navbar />
         <Switch>
           <Route path="/cart" component={Cart} />
-          <Route path="/invoice" component={Invoice} />
+          <Route path="/invoice/:id" component={Invoice} />
           <Route path="/" component={Transaction} />
           <Route path="/revenue" component={Revenue} />
         </Switch>
