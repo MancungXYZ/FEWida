@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToCart, clearCart, getTotals, removeFromCart, decreaseCart } from '../redux/cartSlice'
+import { toast } from "react-toastify";
 import axios from 'axios'
 import moment from 'moment'
 
@@ -36,8 +37,6 @@ function Cart() {
     setRadioValue(e.target.value);
   };
 
-  console.log(radioValue)
-
   const handlePesanan = () => {
     console.log('clicked')
 
@@ -54,6 +53,13 @@ function Cart() {
           amount: total,
           products: cart.cartItems
         }
+      }).then(res => {
+        if (res.status == 201) {
+          toast.success("Orders success", {
+            position: "bottom-left",
+          });
+        }
+        console.log(res.status)
       })
     } catch (error) {
       console.log(error)

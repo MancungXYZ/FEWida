@@ -23,15 +23,13 @@ function Invoice() {
         getOrders()
       }, [])
 
-      console.log(orders)
-
-      // let sum = orders?.reduce(function(prev, current) {
-      //   return prev + +current.price
-      // }, 0);
+      let sum = orders.products?.reduce(function(prev, current) {
+        return prev + +current.totalCogs
+      }, 0);
       
-      // let pajak = 10/100 * sum;
+      let pajak = 10/100 * sum;
 
-      // let grandPrice = pajak + sum;
+      let grandPrice = pajak + sum;
       
     return (
     <section className="bg-white py-20">
@@ -96,7 +94,7 @@ function Invoice() {
                   </td>
                   <td className="whitespace-nowrap text-gray-600 truncate"></td>
                   <td className="whitespace-nowrap text-gray-600 truncate"> {product.quantity} </td>
-                  <td className="whitespace-nowrap text-gray-600 truncate"> Rp {product.price} </td>
+                  <td className="whitespace-nowrap text-gray-600 truncate"> Rp {product.totalCogs} </td>
                 </tr>
                   ))}
               </tbody>
